@@ -7,6 +7,12 @@ module.exports = {
                 ws: true,
                 changeOrigin: true
             },
+            '/api': {   //  /api开头的所有求，全部转到 'http://m.maoyan.com'
+                target: 'http://pv.sohu.com',  //请求地址
+                ws: true,
+                changeOrigin: true,
+            },
+            
         }
     }
 }

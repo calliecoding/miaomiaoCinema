@@ -1,20 +1,23 @@
 <template>
   <div class="movie_body">
-    <ul>
-      <li v-for="item in filmList" :key="item.filmId">
-        <div class="pic_show"><img :src="item.poster" /></div>
-        <div class="info_list">
-          <h2>
-            {{ item.name
-            }}<span v-if="item.filmType.value === 1" class="item">2D</span>
-          </h2>
-          <p><span class="person">17746</span> 人想看</p>
-          <p>主演:{{ item.actors | actorFilter(item.actors) }}</p>
-          <p>{{ handleTime(item.premiereAt) }}上映</p>
-        </div>
-        <div class="btn_pre">预售</div>
-      </li>
-    </ul>
+      <Loading v-if="isLoading"></Loading>
+    <Scroller v-else>
+      <ul>
+        <li v-for="item in filmList" :key="item.filmId">
+          <div class="pic_show"><img :src="item.poster" /></div>
+          <div class="info_list">
+            <h2>
+              {{ item.name
+              }}<span v-if="item.filmType.value === 1" class="item">2D</span>
+            </h2>
+            <p><span class="person">17746</span> 人想看</p>
+            <p>主演:{{ item.actors | actorFilter(item.actors) }}</p>
+            <p>{{ handleTime(item.premiereAt) }}上映</p>
+          </div>
+          <div class="btn_pre">预售</div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
@@ -33,12 +36,20 @@ export default {
     return {
       filmList: null,
       total: null,
+      isLoading:true,
+       preCityId: -1, //城市id可能是负数
     };
   },
-  mounted() {
+  activated() {
+      var cityId = this.$store.state.city.id;
+    if (cityId === this.preCityId) {
+        // 判断是否切换城市
+    //   this.isLoading = false;
+      return;
+    }
     this.axios({
       url:
-        "https://m.maizuo.com/gateway?cityId=440300&pageNum=1&pageSize=10&type=2&k=7343916",
+        `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=1&pageSize=10&type=2&k=7343916`,
 
       headers: {
         "X-Client-Info":
@@ -47,6 +58,8 @@ export default {
       },
     }).then((res) => {
       if (res.data.msg === "ok") {
+           this.preCityId = cityId;
+          this.isLoading = false
         this.filmList = res.data.data.films;
         this.total = res.data.data.total;
       }
@@ -69,13 +82,12 @@ export default {
         "星期五",
         "星期六",
       ];
-  
-      var week = arr[moment(date).format("d")]
+
+      var week = arr[moment(date).format("d")];
 
       res = `${week} ${month}月${day}日 `;
       return res;
-    },
-    
+    }
   },
 };
 </script>

@@ -1,25 +1,27 @@
 <template>
   <div class="cinema_body">
-    <ul>
-      
-      <li v-for="item in cinemaList" :key="item.cinemaId">
-        <div>
-          <span>{{ item.name }}</span>
-          <span class="q"
-            ><span class="price">{{ item.lowPrice | priceFilter }}</span>
-            元起</span 
-          >
-        </div>
-        <div class="address">
-          <span>{{ item.address }}</span>
-          <span>{{ item.Distance | distanceFilter  }}</span>
-        </div>
-         <div class="card">
-          <div>小吃</div>
-          <div>折扣卡</div>
-        </div>
-      </li>
-    </ul>
+    <Loading v-if="isLoading"></Loading>
+    <div v-else>
+      <ul>
+        <li v-for="item in cinemaList" :key="item.cinemaId">
+          <div>
+            <span>{{ item.name }}</span>
+            <span class="q"
+              ><span class="price">{{ item.lowPrice | priceFilter }}</span>
+              元起</span
+            >
+          </div>
+          <div class="address">
+            <span>{{ item.address }}</span>
+            <span>{{ item.Distance | distanceFilter }}</span>
+          </div>
+          <div class="card">
+            <div>小吃</div>
+            <div>折扣卡</div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -29,12 +31,21 @@ export default {
   data() {
     return {
       cinemaList: null,
+      isLoading: true,
+      preCityId: -1, //城市id可能是负数
+     
     };
   },
- 
-  mounted() {
+
+  activated() {
+    var cityId = this.$store.state.city.id
+    if (cityId === this.preCityId) {
+        // 判断是否切换城市
+    //   this.isLoading = false;
+      return;
+    }
     this.axios({
-      url: "https://m.maizuo.com/gateway?cityId=440100&ticketFlag=1&k=1154233",
+      url: "https://m.maizuo.com/gateway?cityId="+cityId+"&ticketFlag=1&k=1154233",
 
       headers: {
         "X-Client-Info":
@@ -42,23 +53,24 @@ export default {
         "X-Host": "mall.film-ticket.cinema.list",
       },
     }).then((res) => {
-      // console.log(res.data);
+    //   console.log(res.data);
       if (res.data.msg === "ok") {
+        this.isLoading = false;
         this.cinemaList = res.data.data.cinemas;
-        console.log(this.cinemaList);
+        // console.log(this.cinemaList);
       }
     });
   },
-   filters: {
+  filters: {
     priceFilter(lowPrice) {
-      return lowPrice/100
+      return lowPrice / 100;
     },
 
-    distanceFilter(Distance){
-        var result = Distance * 1000 ;
-         
-        return result.toFixed(1) + 'km'
-    }
+    distanceFilter(Distance) {
+      var result = (Distance * 1000).toFixed(1) + "km";
+
+      return result;
+    },
   },
 };
 </script>

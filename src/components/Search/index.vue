@@ -51,10 +51,11 @@ export default {
   watch: {
     //监测message的变化
     message(newVal, OldVal) {
+      var cityId = this.$store.state.city.id;  
       var that = this;
       this.cancelRequest()
       this.axios
-        .get(`/ajax/search?kw=${newVal}&cityId=150&stype=-1`, {
+        .get(`/ajax/search?kw=${newVal}&cityId=${cityId}&stype=-1`, {
           cancelToken: new this.axios.CancelToken(function executor(c) {
               console.log(1);
             that.source = c;
