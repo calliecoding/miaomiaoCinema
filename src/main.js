@@ -4,7 +4,12 @@ import router from './router'
 import store from './store'
 
 import axios from 'axios'
+import Scroller from '@/components/Scroller'
+import Loading from '@/components/Loading'
 
+//注册成全局组件
+Vue.component('Scroller',Scroller)
+Vue.component('Loading',Loading)
 
 Vue.prototype.axios = axios
 

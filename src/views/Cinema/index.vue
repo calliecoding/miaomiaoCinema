@@ -4,7 +4,7 @@
     <div id="content">
       <div class="cinema_menu">
         <router-link tag="div" to="/cinema/city" class="city_switch">
-          全城 <i class="iconfont icon-lower-triangle"></i>
+          {{$store.state.city.nm}} <i class="iconfont icon-lower-triangle"></i>
         </router-link>
         <div class="brand_swtich">
           品牌 <i class="iconfont icon-lower-triangle"></i>
