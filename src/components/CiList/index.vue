@@ -7,7 +7,7 @@
           <span>{{ item.name }}</span>
           <span class="q"
             ><span class="price">{{ item.lowPrice | priceFilter }}</span>
-            元起</span
+            元起</span 
           >
         </div>
         <div class="address">
