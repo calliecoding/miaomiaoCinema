@@ -7,7 +7,7 @@
 
     <div id="content" class="contentDetail" v-else>
       <div class="detail_list">
-        <div class="detail_list_bg"></div>
+        <div class="detail_list_bg" :style="{'background-image': `url(${detailMoive.poster})`}"></div>
         <div class="detail_list_filter"></div>
         <div class="detail_list_content">
           <div class="detail_list_img">
@@ -169,8 +169,8 @@ export default {
 .detail_list .detail_list_bg {
   width: 100%;
   height: 100%;
-  background: url(/images/movie_1.jpg) 0 40%;
-  filter: blur(20px);
+  background: 0 40%;
+  /* filter: blur(20px); */
   background-size: cover;
   position: absolute;
   left: 0;

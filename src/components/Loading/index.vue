@@ -6,7 +6,7 @@
 export default {
   name: "loading",
 };
-</script>
+</script> 
 
 <style scoped>
 .loader {
