@@ -24,6 +24,8 @@
       </keep-alive>
     </div>
     <TabBar />
+
+    <router-view name="detail" />
   </div>
 </template>
 
@@ -59,7 +61,6 @@ export default {
         },
       });
     }, 2000); */
-
     /* this.axios.get("/api/cityjson?ie=utf-8").then((res) => {
         console.log(res);
       var msg = res.data.msg;

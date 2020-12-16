@@ -8,7 +8,7 @@
     >
       <ul>
         <li>{{ pullDownMsg }}</li>
-        <li v-for="item in filmList" :key="item.filmId" @tap="handleToDetail">
+        <li v-for="item in filmList" :key="item.filmId" @tap="handleToDetail(item.filmId)">
           <div class="pic_show"><img :src="item.poster" /></div>
           <div class="info_list">
             <h2>
@@ -77,8 +77,11 @@ export default {
       var newList = actors.map((item) => item.name).join();
       return newList;
     },
-    handleToDetail() {
-      //   console.log("handleToDetail");
+    handleToDetail(movieId) {
+        console.log(movieId);
+      //传递详情页面id
+    //调整到详情页，动态路由
+        this.$router.push('/movie/detail/1/'+ movieId)
     },
     handleToScroll(pos) {
       //   console.log("handleToScroll");

@@ -3,7 +3,7 @@
       <Loading v-if="isLoading"></Loading>
     <Scroller v-else>
       <ul>
-        <li v-for="item in filmList" :key="item.filmId">
+        <li v-for="item in filmList" :key="item.filmId" @tap="handleToDetail(item.filmId)" >
           <div class="pic_show"><img :src="item.poster" /></div>
           <div class="info_list">
             <h2>
@@ -87,7 +87,13 @@ export default {
 
       res = `${week} ${month}月${day}日 `;
       return res;
-    }
+    },
+    handleToDetail(movieId) {
+        console.log(movieId);
+      //传递详情页面id
+    //调整到详情页，动态路由
+        this.$router.push('/movie/detail/2/'+ movieId)
+    },
   },
 };
 </script>
