@@ -1,7 +1,7 @@
 const state = {
-    nm:  
-    decodeURIComponent(localStorage.getItem("nm") )||'北京',
-    id: localStorage.getItem("id")||1
+    nm:localStorage.getItem("nm") ? decodeURIComponent(localStorage.getItem("nm")) : '北京',
+    id: localStorage.getItem("id")||110100,
+    
 
 };
 const mutations = {

@@ -1,5 +1,5 @@
 module.exports = {
-    // publicPath:'/miaomiaocinema',
+    publicPath:'/miaomiaocinema',
     //必须有devServer
     devServer: {
         proxy: {
@@ -8,7 +8,11 @@ module.exports = {
                 ws: true,
                 changeOrigin : true
             },
-            
+            '/ajax' : {
+                target : 'https://m.maoyan.com', 
+                ws: true,
+                changeOrigin : true
+            },
         }
     }
 }

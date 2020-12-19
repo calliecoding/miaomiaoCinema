@@ -170,7 +170,7 @@ export default {
   width: 100%;
   height: 100%;
   background: 0 40%;
-  /* filter: blur(20px); */
+  filter: blur(20px);
   background-size: cover;
   position: absolute;
   left: 0;
