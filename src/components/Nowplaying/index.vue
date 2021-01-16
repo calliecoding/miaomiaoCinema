@@ -31,7 +31,7 @@
     </Scroller>
   </div>
 </template>
-
+ 
 <script>
 export default {
   name: "Nowplaying",
@@ -41,29 +41,32 @@ export default {
       total: null, //记录正在热映的所有电影的数量
       pullDownMsg: "",
       isLoading: true,
-      preCityId: -1, //城市id可能是负数
+      preCityId: -1, //记录切换前的城市Id；城市id可能是负数
+      pageNum:1,//存放pagesize
+
     };
   },
-  activated() { //activated keep-live
-    var cityId = this.$store.state.city.id;
-    if (cityId === this.preCityId) {
-        // 判断是否切换城市
-    //   this.isLoading = false;
+  activated() { //keep-live 的activated 生命周期
+    var cityId = this.$store.state.city.id; //获取切换后的城市Id
+
+    if (cityId === this.preCityId) { // 判断是否切换城市
+        // this.isLoading = false;
       return;
     }
-//   console.log(123);
+//   console.log(this.pageNum);
     this.axios({
       url:
-        `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=1&pageSize=10&type=1&k=6940610`,
+        `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=${this.pageNum}&pageSize=10&type=1&k=6940610`,
 
       headers: {
         "X-Client-Info":
           '{"a":"3000","ch":"1002","v":"5.0.4","e":"15610855429195524981146"}',
         "X-Host": "mall.film-ticket.film.list",
       },
-    }).then((res) => {
+    })
+    .then((res) => {
       if (res.data.msg === "ok") {
-        this.preCityId = cityId;
+        this.preCityId = cityId;//更新preCityId
         this.isLoading = false;
         var filmData = res.data.data;
         this.filmList = filmData.films;
@@ -74,11 +77,12 @@ export default {
 
   methods: {
     actorFilter(actors) {
+        // console.log(actors);
       var newList = actors.map((item) => item.name).join();
       return newList;
     },
     handleToDetail(movieId) {
-        console.log(movieId);
+        // console.log(movieId);
       //传递详情页面id
     //调整到详情页，动态路由
         this.$router.push('/movie/detail/1/'+ movieId)
@@ -91,10 +95,13 @@ export default {
     },
     handleToTouchEnd(pos) {
       //   console.log("handleToTouchEnd");
+      var cityId = this.$store.state.city.id;
+      this.pageNum ++;
+    //   console.log(this.pageNum);
       if (pos.y > 30) {
         this.axios({
           url:
-            "https://m.maizuo.com/gateway?cityId=110100&pageNum=2&pageSize=10&type=1&k=6940610",
+            `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=${this.pageNum}&pageSize=10&type=1&k=6940610`,
 
           headers: {
             "X-Client-Info":
@@ -108,6 +115,7 @@ export default {
             this.filmList = filmData.films;
             this.total = filmData.total;
             this.pullDownMsg = "";
+            console.log(1);
           }, 2000);
         });
       }

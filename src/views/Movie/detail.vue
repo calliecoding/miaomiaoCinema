@@ -5,58 +5,67 @@
     </Header>
     <Loading v-if="isLoading"></Loading>
 
-    <div id="content" class="contentDetail" v-else>
-      <div class="detail_list">
-        <div class="detail_list_bg" :style="{'background-image': `url(${detailMoive.poster})`}"></div>
-        <div class="detail_list_filter"></div>
-        <div class="detail_list_content">
-          <div class="detail_list_img">
-            <img :src="detailMoive.poster" alt="" />
+    <Scroller id="filmContent" class="contentDetail" v-else>
+      <div>
+        <div>
+          <div class="detail_list">
+            <div
+              class="detail_list_bg"
+              :style="{ 'background-image': `url(${detailMoive.poster})` }"
+            ></div>
+            <div class="detail_list_filter"></div>
+            <div class="detail_list_content">
+              <div class="detail_list_img">
+                <img :src="detailMoive.poster" alt="" />
+              </div>
+              <div class="detail_list_info">
+                <h2>{{ detailMoive.name }}</h2>
+                <p>{{ detailMoive.grade }}</p>
+                <p>{{ detailMoive.category }}</p>
+                <p>{{ detailMoive.nation }} / {{ detailMoive.runtime }}分钟</p>
+                <p>{{ handleTime(detailMoive.premiereAt) }}上映</p>
+              </div>
+            </div>
           </div>
-          <div class="detail_list_info">
-            <h2>{{ detailMoive.name }}</h2>
-            <p>{{ detailMoive.grade }}</p>
-            <p>{{ detailMoive.category }}</p>
-            <p>{{ detailMoive.nation }} / {{ detailMoive.runtime }}分钟</p>
-            <p>{{ handleTime(detailMoive.premiereAt) }}上映</p>
+          <div class="detail_intro">
+            <p>
+              {{ detailMoive.synopsis }}
+            </p>
+          </div>
+
+          <div class="detail_player" ref="detail_player">
+            <h3>剧照</h3>
+            <Swiper
+              perview="2"
+              class="swiper-wrapper stageswiper"
+              myclassname="stageswiper"
+            >
+              <div
+                class="swiper-slide"
+                v-for="(item, index) in detailMoive.photos"
+                :key="index"
+              >
+                <img :src="item" alt="" />
+              </div>
+            </Swiper>
+          </div>
+          <div class="detail_player">
+            <h3>演职人员</h3>
+            <Swiper perview="4" class="actorswiper" myclassname="actorswiper">
+              <div
+                class="swiper-slide"
+                v-for="(item, index) in detailMoive.actors"
+                :key="index"
+              >
+                <img :src="item.avatarAddress" />
+                <p>{{ item.name }}</p>
+                <p>{{ item.role }}</p>
+              </div>
+            </Swiper>
           </div>
         </div>
       </div>
-      <div class="detail_intro">
-        <p>
-          {{ detailMoive.synopsis }}
-        </p>
-      </div>
-
-      <div class="detail_player" ref="detail_player">
-        <h3>剧照</h3>
-        <Swiper perview="2" class="swiper-wrapper stageswiper" myclassname="stageswiper">
-          <div
-            class="swiper-slide"
-            v-for="(item, index) in detailMoive.photos"
-            :key="index"
-          >
-            <div>
-              <img :src="item" alt="" />
-            </div>
-          </div>
-        </Swiper>
-      </div>
-      <div class="detail_player">
-        <h3>演职人员</h3>
-        <Swiper perview="4" class="actorswiper" myclassname="actorswiper">
-          <div
-            class="swiper-slide"
-            v-for="(item, index) in detailMoive.actors"
-            :key="index"
-          >
-            <img :src="item.avatarAddress" />
-            <p>{{ item.name }}</p>
-            <p>{{ item.role }}</p>
-          </div>
-        </Swiper>
-      </div>
-    </div>
+    </Scroller>
   </div>
 </template>
 
@@ -118,11 +127,11 @@ export default {
     }).then((res) => {
       //   console.log(res);
       if (res.data.msg === "ok") {
-          this.detailMoive = res.data.data.film;
+        this.detailMoive = res.data.data.film;
 
         // this.$nextTick(() => {
-            //   new Swiper(this.$refs.detail_player, {
-                //     slidesPerView: "auto",
+        //   new Swiper(this.$refs.detail_player, {
+        //     slidesPerView: "auto",
         //     freeMode: true,
         //     freeModeSticky: true,
         //   });
@@ -141,12 +150,14 @@ export default {
   top: 0;
   z-index: 100;
   width: 100%;
-  min-height: 100%; /* min-height 保证最小高度与屏幕是相同的 */
-  background: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* min-height 保证最小高度与屏幕是相同的 */
+  background: #f4f4f4;
 }
 
 #detailContainer.slide-enter-active {
-  animation: 0.3s slideMove;
+  animation: 1s slideMove;
 }
 @keyframes slideMove {
   0% {
@@ -156,15 +167,22 @@ export default {
     transform: translateX(0);
   }
 }
-#content.contentDetail {
+#filmContent.contentDetail {
   display: block;
-  margin-bottom: 0;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+
 }
-#content .detail_list {
+#filmContent > div{
+    padding-bottom:50px;
+}
+#filmContent .detail_list {
   height: 200px;
   width: 100%;
   position: relative;
   overflow: hidden;
+  background-color: #fff;
 }
 .detail_list .detail_list_bg {
   width: 100%;
@@ -201,6 +219,7 @@ export default {
   height: 150px;
   border: solid 1px #f0f2f3;
   margin: 20px;
+  background-color: red;
 }
 .detail_list .detail_list_img img {
   width: 100%;
@@ -222,21 +241,44 @@ export default {
   color: #ccc;
 }
 
-#content .detail_intro {
+#filmContent .detail_intro {
   padding: 10px;
+  background-color: #fff;
 }
-#content .detail_player {
-  margin: 20px;
+#filmContent .detail_intro p {
+  color: #7e8185;
+  font-size: 14px;
 }
+#filmContent .detail_player {
+  padding: 10px 20px;
+  margin: 20px 0;
+  background-color: #fff;
+  color: #000;
+}
+#filmContent .detail_player h3 {
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+
 .detail_player .swiper-slide {
   width: 70px;
+  min-height: 110px;
   margin-right: 20px;
   text-align: center;
   font-size: 14px;
+  background-color: #f9f9f9;
+  position: relative;
 }
-.detail_player .swiper-slide img {
+
+.stageswiper .swiper-slide img {
   width: 100%;
-  margin-bottom: 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.actorswiper .swiper-slide {
+  background-color: transparent;
 }
 .detail_player .swiper-slide p:nth-of-type(2) {
   color: #999;

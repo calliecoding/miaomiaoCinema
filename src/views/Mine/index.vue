@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mine">
     <Header title="我的喵喵" />
     <div id="content">
       <router-view />
@@ -24,5 +24,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.mine{
+    height: 100%;
+}
+#content{
+    height: 100%;
+}
 </style>

@@ -57,8 +57,10 @@ export default {
           verifyImg: this.verifyImg,
         })
         .then((res) => {
+            console.log(res.data.status);
           if (res.data.status === 0) {
             var This = this; //存储this
+
             messageBox({
               title: "登陆",
               content: res.data.msg,
@@ -66,6 +68,7 @@ export default {
               handleOk() {
                 //点击确认按钮后，编程导航
                 This.$router.push("/mine/center");
+               
               },
             });
           } else {

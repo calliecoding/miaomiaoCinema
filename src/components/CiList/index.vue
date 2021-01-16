@@ -1,7 +1,7 @@
 <template>
   <div class="cinema_body">
     <Loading v-if="isLoading"></Loading>
-    <div v-else>
+    <Scroller v-else>
       <ul>
         <li v-for="item in cinemaList" :key="item.cinemaId">
           <div>
@@ -21,7 +21,7 @@
           </div>
         </li>
       </ul>
-    </div>
+    </Scroller>
   </div>
 </template>
 
@@ -33,6 +33,7 @@ export default {
       cinemaList: null,
       isLoading: true,
       preCityId: -1, //城市id可能是负数
+
      
     };
   },
@@ -78,7 +79,9 @@ export default {
 <style scoped>
 #content .cinema_body {
   flex: 1;
-  overflow: auto;
+  overflow: hidden;
+  margin-bottom: 50px;
+  position: relative;
 }
 .cinema_body ul {
   padding: 20px;

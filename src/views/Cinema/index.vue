@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="main">
     <Header title="喵喵影院" />
     <div id="content">
       <div class="cinema_menu">
         <router-link tag="div" to="/cinema/city" class="city_switch">
-          {{$store.state.city.nm}} <i class="iconfont icon-lower-triangle"></i>
+          {{ $store.state.city.nm }}
+          <i class="iconfont icon-lower-triangle"></i>
         </router-link>
         <div class="brand_swtich">
           品牌 <i class="iconfont icon-lower-triangle"></i>
@@ -13,9 +14,9 @@
           特色 <i class="iconfont icon-lower-triangle"></i>
         </div>
       </div>
-      <CiList/>
+      <CiList />
     </div>
-    
+
     <TabBar />
   </div>
 </template>
@@ -36,9 +37,24 @@ export default {
 </script>
 
 <style scoped>
-#content{
-    position: initial;
+.main{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
-#content .cinema_menu{ width: 100%; height: 45px; border-bottom:1px solid #e6e6e6; display: flex; justify-content:space-around; align-items:center; background:white;}
-
+#content {
+  width: 100%;
+  flex-basis: 300px;
+  margin-bottom: 0;
+}
+#content .cinema_menu {
+  width: 100%;
+  height: 45px;
+  border-bottom: 1px solid #e6e6e6;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: white;
+  /* flex: 1; */
+}
 </style>

@@ -44,7 +44,6 @@ export default {
     cancelRequest() {
       if (typeof this.source === "function") {
         this.source("终止请求");
-
       }
     },
   },

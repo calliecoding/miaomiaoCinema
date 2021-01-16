@@ -4,7 +4,7 @@
     <div id="content">
       <div class="movie_menu">
         <router-link tag="div" to="/movie/city" class="city_name active">
-          <span>{{$store.state.city.nm}}</span
+          <span>{{ $store.state.city.nm }}</span
           ><i class="iconfont icon-lower-triangle"></i>
         </router-link>
         <div class="hot_swtich">
@@ -42,27 +42,39 @@ export default {
     TabBar,
   },
   mounted() {
-    /* setTimeout(() => {
-      var nm = returnCitySN.cname;
-      var id = returnCitySN.cid;
-      console.log(nm, id);
-      if (this.$store.state.city.id == id) {
-        return;
-      }
+    //进入组件时，弹窗+定位城市
+    var _this = this;
+    
+    //通过定时器模拟异步请求，并弹窗
+    setTimeout(() => {  
+      // console.log(1);
+      //   var nm = returnCitySN.cname;
+      //   var id = returnCitySN.cid;
+      //   console.log(nm, id);
+      //   if (this.$store.state.city.id == id) {
+      //     return;
+      //   }
       messageBox({
         title: "定位",
-        content: nm,
+        content: "自动获取失败",
         cancel: "取消",
         ok: "切换定位",
         handleOk() {
-          window.localStorage.setItem("nowNm", nm);
-          window.localStorage.setItem("nowId", id);
-          window.location.reload();
+        //   window.localStorage.setItem("nowNm", nm);
+        //   window.localStorage.setItem("nowId", id);
+        //   window.location.reload();
+        },
+        handleCancel() {
+            
+        if(_this.$router.history.current.path === '/movie/city')return
+          _this.$router.push("/movie/city");
         },
       });
-    }, 2000); */
-    /* this.axios.get("/api/cityjson?ie=utf-8").then((res) => {
-        console.log(res);
+    }, 1000);
+
+
+    //异步接口+弹窗
+ /*    this.axios.get("/api/cityjson?ie=utf-8").then((res) => {
       var msg = res.data.msg;
       if (msg === "ok") {
         var nm = res.data.data.nm;
@@ -80,9 +92,13 @@ export default {
             window.localStorage.setItem("nowId", id);
             window.location.reload();
           },
+          handleCancel() {
+            this.$router.push("/movie");
+          },
         });
       }
     }); */
+
   },
   methods: {},
 };

@@ -1,9 +1,13 @@
 <template>
   <div class="movie_body">
-      <Loading v-if="isLoading"></Loading>
+    <Loading v-if="isLoading"></Loading>
     <Scroller v-else>
       <ul>
-        <li v-for="item in filmList" :key="item.filmId" @tap="handleToDetail(item.filmId)" >
+        <li
+          v-for="item in filmList"
+          :key="item.filmId"
+          @tap="handleToDetail(item.filmId)"
+        >
           <div class="pic_show"><img :src="item.poster" /></div>
           <div class="info_list">
             <h2>
@@ -11,7 +15,7 @@
               }}<span v-if="item.filmType.value === 1" class="item">2D</span>
             </h2>
             <p><span class="person">17746</span> 人想看</p>
-            <p>主演:{{ item.actors | actorFilter(item.actors) }}</p>
+            <p>主演:{{ item.actors | actorFilter}}</p>
             <p>{{ handleTime(item.premiereAt) }}上映</p>
           </div>
           <div class="btn_pre">预售</div>
@@ -25,6 +29,7 @@
 import Vue from "vue";
 import moment from "moment";
 Vue.filter("actorFilter", function (actors) {
+   
   var newList = actors.map((item) => item.name).join();
   return newList;
 });
@@ -36,20 +41,19 @@ export default {
     return {
       filmList: null,
       total: null,
-      isLoading:true,
-       preCityId: -1, //城市id可能是负数
+      isLoading: true,
+      preCityId: -1, //城市id可能是负数
     };
   },
   activated() {
-      var cityId = this.$store.state.city.id;
+    var cityId = this.$store.state.city.id;
     if (cityId === this.preCityId) {
-        // 判断是否切换城市
-    //   this.isLoading = false;
+      // 判断是否切换城市
+      //   this.isLoading = false;
       return;
     }
     this.axios({
-      url:
-        `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=1&pageSize=10&type=2&k=7343916`,
+      url: `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=1&pageSize=2&type=2&k=7343916`,
 
       headers: {
         "X-Client-Info":
@@ -58,8 +62,8 @@ export default {
       },
     }).then((res) => {
       if (res.data.msg === "ok") {
-           this.preCityId = cityId;
-          this.isLoading = false
+        this.preCityId = cityId;
+        this.isLoading = false;
         this.filmList = res.data.data.films;
         this.total = res.data.data.total;
       }
@@ -89,10 +93,10 @@ export default {
       return res;
     },
     handleToDetail(movieId) {
-        console.log(movieId);
+    //   console.log(movieId);
       //传递详情页面id
-    //调整到详情页，动态路由
-        this.$router.push('/movie/detail/2/'+ movieId)
+      //调整到详情页，动态路由
+      this.$router.push("/movie/detail/2/" + movieId);
     },
   },
 };

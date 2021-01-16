@@ -14,7 +14,7 @@ export default {
   mounted() {
       
       this.$nextTick(() => {
-          console.log(this.perview);
+        //   console.log(this.perview);
         new Swiper("." + this.myclassname, {
           slidesPerView: this.perview,
           spaceBetween: this.myclassname === "actorswiper" ? 20 : 10,

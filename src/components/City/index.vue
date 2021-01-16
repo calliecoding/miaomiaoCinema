@@ -3,7 +3,8 @@
     <div class="city_list">
       <Loading v-if="isLoading"></Loading>
       <Scroller ref="city_list" v-else>
-        <div>
+        <!-- 用div进行包裹 -->
+        <div> 
           <div class="city_hot">
             <h2>热门城市</h2>
             <ul class="clearfix">
@@ -58,6 +59,7 @@ export default {
     };
   },
   mounted() {
+       
     var cityList = localStorage.getItem("cityList");
     var hotList = localStorage.getItem("hotList");
 

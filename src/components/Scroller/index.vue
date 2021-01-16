@@ -30,14 +30,18 @@ export default {
     //     });
     //   } else {
     //     this.scroll.refresh();
-    //   }
+    //   } 
       
       var scroll = new BScroll(this.$refs.wraper, {
         tap: "tap",
         probeType: 2,
+        scrollbar:{
+            fade:true,
+            interactive:true,
+        }
       });
     //   console.log(scroll);
-      this.scroll = scroll;
+      this.scroll = scroll; //把局部的对象，添加到组件属性里，方便在methods访问到
 
       scroll.on("scroll", (pos) => {
         this.handleToScroll(pos);
@@ -49,7 +53,7 @@ export default {
   },
   methods: {
     toScrollTop(y) {
-      this.scroll.scrollTo(0, y);
+      this.scroll.scrollTo(0, y); //调用方法
     },
   },
 };
