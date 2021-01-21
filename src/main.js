@@ -16,15 +16,23 @@ Vue.component('Loading',Loading)
 
 
 
+
 //引入第三方组件库
-import ElementUI from 'element-ui';
+import ElementUI from 'element-ui'; 
 import 'element-ui/lib/theme-chalk/index.css';
+import VueLazyload from 'vue-lazyload'; //图片懒加载
+
+
 Vue.use(ElementUI);
+Vue.use(VueLazyload,{
+    loading: require("@/assets/loading.jpg"),//加载中图片，一定要有，不然会一直重复加载占位图
+    error: require("@/assets/error.jpg")  //加载失败图片
+})
+
 
 Vue.prototype.axios = axios
 
 Vue.config.productionTip = false
-
 
 
 

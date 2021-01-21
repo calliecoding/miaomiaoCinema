@@ -8,8 +8,12 @@
     >
       <ul>
         <li>{{ pullDownMsg }}</li>
-        <li v-for="item in filmList" :key="item.filmId" @tap="handleToDetail(item.filmId)">
-          <div class="pic_show"><img :src="item.poster" /></div>
+        <li
+          v-for="item in filmList"
+          :key="item.filmId"
+          @tap="handleToDetail(item.filmId)"
+        >
+          <div class="pic_show"><img v-lazy="item.poster" /></div>
           <div class="info_list">
             <h2>
               {{ item.name }}
@@ -22,7 +26,7 @@
             <p>
               观众评 <span class="grade">{{ item.grade }}</span>
             </p>
-            <p>主演: {{ actorFilter(item.actors) }}</p>
+            <p v-if="item.actors">主演: {{ actorFilter(item.actors) }}</p>
             <p>分类: {{ item.category }}</p>
           </div>
           <div class="btn_mall">购票</div>
@@ -42,31 +46,32 @@ export default {
       pullDownMsg: "",
       isLoading: true,
       preCityId: -1, //记录切换前的城市Id；城市id可能是负数
-      pageNum:1,//存放pagesize
-
+      pageNum: 1, //存放pagesize
+      pageSize: 10,
     };
   },
-  activated() { //keep-live 的activated 生命周期
+  activated() {
+    //keep-live 的activated 生命周期
     var cityId = this.$store.state.city.id; //获取切换后的城市Id
 
-    if (cityId === this.preCityId) { // 判断是否切换城市
-        // this.isLoading = false;
+    if (cityId === this.preCityId) {
+      // 判断是否切换城市
+      // this.isLoading = false;
       return;
     }
-//   console.log(this.pageNum);
+    //   console.log(this.pageNum);
     this.axios({
-      url:
-        `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=${this.pageNum}&pageSize=10&type=1&k=6940610`,
+      url: `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=${this.pageNum}&pageSize=10&type=1&k=6940610`,
 
       headers: {
         "X-Client-Info":
           '{"a":"3000","ch":"1002","v":"5.0.4","e":"15610855429195524981146"}',
         "X-Host": "mall.film-ticket.film.list",
       },
-    })
-    .then((res) => {
+    }).then((res) => {
+    //   console.log(res.data);
       if (res.data.msg === "ok") {
-        this.preCityId = cityId;//更新preCityId
+        this.preCityId = cityId; //更新preCityId
         this.isLoading = false;
         var filmData = res.data.data;
         this.filmList = filmData.films;
@@ -77,15 +82,15 @@ export default {
 
   methods: {
     actorFilter(actors) {
-        // console.log(actors);
+    if(!actors)return;
       var newList = actors.map((item) => item.name).join();
       return newList;
     },
     handleToDetail(movieId) {
-        // console.log(movieId);
+      // console.log(movieId);
       //传递详情页面id
-    //调整到详情页，动态路由
-        this.$router.push('/movie/detail/1/'+ movieId)
+      //调整到详情页，动态路由
+      this.$router.push("/movie/detail/1/" + movieId);
     },
     handleToScroll(pos) {
       //   console.log("handleToScroll");
@@ -96,28 +101,38 @@ export default {
     handleToTouchEnd(pos) {
       //   console.log("handleToTouchEnd");
       var cityId = this.$store.state.city.id;
-      this.pageNum ++;
-    //   console.log(this.pageNum);
+
+      if (this.pageNum * this.pageSize > this.total) {
+        this.pullDownMsg = "敬请期待更多";
+        setTimeout(() => {
+            this.pullDownMsg = "";
+        }, 2000);
+        return;
+      }
+      this.pageNum++;
+
       if (pos.y > 30) {
         this.axios({
-          url:
-            `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=${this.pageNum}&pageSize=10&type=1&k=6940610`,
+          url: `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=${this.pageNum}&pageSize=10&type=1&k=6940610`,
 
           headers: {
             "X-Client-Info":
               '{"a":"3000","ch":"1002","v":"5.0.4","e":"15610855429195524981146"}',
             "X-Host": "mall.film-ticket.film.list",
           },
-        }).then((res) => {
-          this.pullDownMsg = "更新成功";
-          setTimeout(() => {
-            var filmData = res.data.data;
-            this.filmList = filmData.films;
-            this.total = filmData.total;
-            this.pullDownMsg = "";
-            console.log(1);
-          }, 2000);
-        });
+        })
+          .then((res) => {
+            this.pullDownMsg = "更新成功";
+            setTimeout(() => {
+              var filmData = res.data.data;
+              this.filmList = filmData.films;
+              this.total = filmData.total;
+              this.pullDownMsg = "";
+            }, 2000);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
   },

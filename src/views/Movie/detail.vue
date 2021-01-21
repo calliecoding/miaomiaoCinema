@@ -1,5 +1,6 @@
 <template>
-  <div id="detailContainer" class="slide-enter-active">
+
+ <div id="detailContainer" class="slide-enter-active">
     <Header title="影片详情">
       <i class="iconfont icon-right" @touchstart="handleToBack"></i>
     </Header>
@@ -16,7 +17,7 @@
             <div class="detail_list_filter"></div>
             <div class="detail_list_content">
               <div class="detail_list_img">
-                <img :src="detailMoive.poster" alt="" />
+                <img v-lazy="detailMoive.poster" alt="" />
               </div>
               <div class="detail_list_info">
                 <h2>{{ detailMoive.name }}</h2>
@@ -27,6 +28,7 @@
               </div>
             </div>
           </div>
+        
           <div class="detail_intro">
             <p>
               {{ detailMoive.synopsis }}
@@ -44,8 +46,9 @@
                 class="swiper-slide"
                 v-for="(item, index) in detailMoive.photos"
                 :key="index"
+                @tap="handlePreview(index)"
               >
-                <img :src="item" alt="" />
+                <img v-lazy="item" alt="" />
               </div>
             </Swiper>
           </div>
@@ -57,7 +60,7 @@
                 v-for="(item, index) in detailMoive.actors"
                 :key="index"
               >
-                <img :src="item.avatarAddress" />
+                <img v-lazy="item.avatarAddress" />
                 <p>{{ item.name }}</p>
                 <p>{{ item.role }}</p>
               </div>
@@ -66,7 +69,7 @@
         </div>
       </div>
     </Scroller>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -74,17 +77,23 @@
 import Header from "@/components/Header";
 import moment from "moment";
 import Swiper from "@/components/Swiper";
+import Pre from "@/components/prew";
+import { ImagePreview } from 'vant';
+
 export default {
   name: "Detail",
   data() {
     return {
       detailMoive: {},
       isLoading: true,
+      photosList: [],
     };
   },
   components: {
     Header,
     Swiper,
+    Pre
+    
   },
   props: ["movieId"],
   methods: {
@@ -113,6 +122,14 @@ export default {
       res = `${week} ${month}月${day}日 `;
       return res;
     },
+    handlePreview(index) {
+      console.log(index);
+      ImagePreview({
+        images: this.photosList,
+        startPosition: index,
+        onClose() {},
+      });
+    },
   },
   mounted() {
     // console.log(this.movieId);
@@ -137,6 +154,7 @@ export default {
         //   });
         // });
         this.isLoading = false;
+        this.photosList = this.detailMoive.photos;
       }
     });
   },
@@ -172,10 +190,9 @@ export default {
   height: 100%;
   overflow: hidden;
   position: relative;
-
 }
-#filmContent > div{
-    padding-bottom:50px;
+#filmContent > div {
+  padding-bottom: 50px;
 }
 #filmContent .detail_list {
   height: 200px;
@@ -219,7 +236,7 @@ export default {
   height: 150px;
   border: solid 1px #f0f2f3;
   margin: 20px;
-  background-color: red;
+  /* background-color: red; */
 }
 .detail_list .detail_list_img img {
   width: 100%;
