@@ -59,12 +59,12 @@ export default {
         content: "自动获取失败",
         cancel: "取消",
         ok: "切换定位",
-        handleOk() {
+        handleCancel() {
         //   window.localStorage.setItem("nowNm", nm);
         //   window.localStorage.setItem("nowId", id);
         //   window.location.reload();
         },
-        handleCancel() {
+        handleOk() {
             
         if(_this.$router.history.current.path === '/movie/city')return
           _this.$router.push("/movie/city");

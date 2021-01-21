@@ -3,7 +3,7 @@
     <el-table :data="nowTableDate" border style="width: 100%">
       <el-table-column prop="userPortrait" label="头像"> 
             <template slot-scope="scope">
-                <img class="userPortrait" :src="scope.row.userPortrait" alt="">
+                <img class="userPortrait" v-lazy="scope.row.userPortrait" alt="">
             </template>
       </el-table-column>
       <el-table-column prop="date" label="注册日期"> </el-table-column>

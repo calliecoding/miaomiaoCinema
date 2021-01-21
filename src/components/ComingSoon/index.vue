@@ -8,7 +8,7 @@
           :key="item.filmId"
           @tap="handleToDetail(item.filmId)"
         >
-          <div class="pic_show"><img :src="item.poster" /></div>
+          <div class="pic_show"><img v-lazy="item.poster" /></div>
           <div class="info_list">
             <h2>
               {{ item.name
@@ -29,7 +29,8 @@
 import Vue from "vue";
 import moment from "moment";
 Vue.filter("actorFilter", function (actors) {
-   
+   if(!actors)return;
+     
   var newList = actors.map((item) => item.name).join();
   return newList;
 });
@@ -43,6 +44,8 @@ export default {
       total: null,
       isLoading: true,
       preCityId: -1, //城市id可能是负数
+      pageSize:10,
+      pageNum:1
     };
   },
   activated() {
@@ -53,7 +56,7 @@ export default {
       return;
     }
     this.axios({
-      url: `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=1&pageSize=2&type=2&k=7343916`,
+      url: `https://m.maizuo.com/gateway?cityId=${cityId}&pageNum=${this.pageNum}&pageSize=${this.pageSize}&type=2&k=7343916`,
 
       headers: {
         "X-Client-Info":
@@ -93,7 +96,7 @@ export default {
       return res;
     },
     handleToDetail(movieId) {
-    //   console.log(movieId);
+     //  console.log(movieId);
       //传递详情页面id
       //调整到详情页，动态路由
       this.$router.push("/movie/detail/2/" + movieId);

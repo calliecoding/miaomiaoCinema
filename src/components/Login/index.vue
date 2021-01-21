@@ -23,7 +23,12 @@
         v-model="verifyImg"
         placeholder="请输入验证码"
       />
-      <img src="/api/users/verifyImg" @touchstart="handleToverifyImg" />
+      <img 
+      src="/api/users/verifyImg" 
+      @touchstart="handleToverifyImg"
+      title="图形验证码"
+      
+       />
     </div>
 
     <div class="login_btn">

@@ -10,7 +10,7 @@
       <h3>电影/电视剧/综艺</h3>
       <ul>
         <li v-for="item in movieList" :key="item.id">
-          <div class="img"><img :src="item.img | setWH('128.80')" /></div>
+          <div class="img"><img v-lazy="item.img | setWH('128.80')" /></div>
           <div class="info">
             <p>
               <span>{{ item.nm }}</span

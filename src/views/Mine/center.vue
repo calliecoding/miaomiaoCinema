@@ -2,7 +2,7 @@
   <div id="userCenter">
     <div class="userInfor">
       <div>
-        <img class="userPortrait" :src="$store.state.user.userPortrait" />
+        <img class="userPortrait" v-lazy="$store.state.user.userPortrait" />
         <label for="file">
           <input
             type="file"
@@ -23,9 +23,9 @@
           <a href="/admin" target="_blank">进入管理后台</a>
         </div>
         <div v-else>用户身份：普通会员</div>
+         <a href="javascript:;" @touchend="handleToLogout">退出账户</a>
       </div>
     </div>
-
     <ul class="myCard">
         <li>
             <img src="/1.png" alt="">
@@ -36,6 +36,7 @@
             <p>商品订单</p>
         </li>
     </ul>
+    
 
     <!-- <div>
       当前用户：{{ $store.state.user.name }}
@@ -52,7 +53,7 @@
           value="上传头像"
           @change="handleToUpload"
         />
-        <img class="userPortrait" :src="$store.state.user.userPortrait" />
+        <img class="userPortrait" v-lazy="$store.state.user.userPortrait" />
       </div>
     </div> -->
   </div>
